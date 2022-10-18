@@ -25,7 +25,7 @@ Expect the occasional bug at this stage. The webserver can be deployed in a Dock
 
 ### Prerequistes
 
-* A running instance of Firefly III
+* A running instance of [Firefly III](https://www.firefly-iii.org)
 * [Firefly API token](https://docs.firefly-iii.org/firefly-iii/api/)
 * [Up API token](https://api.up.com.au/getting_started)
 * Endpoint for your webhook
