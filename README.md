@@ -2,7 +2,7 @@
 	
 Python webserver to connect your UP accounts with [Firefly III](https://www.firefly-iii.org). The inspiration came from a [different project by Gustav de Prez](https://github.com/Mugl3/UP_Firefly_API_Connector). This project takes a different approach with the code written from scratch, and adds some useful features.
 
-Expect the occasional bug at this stage. The webserver is deployed via a Docker container. Pull requests welcome!
+Expect the occasional bug at this stage. The webserver can be deployed in a Docker container. Pull requests welcome!
 
 ## Features
 
