@@ -37,7 +37,7 @@ For easy deployment, the webserver runs in a [Docker](https://docs.docker.com/en
 ```
 git clone https://github.com/fireup
 cd fireup
-docker build -t local/up-firefly .
+docker build -t fireup .
 ```
 
 ### Configuring the webserver
