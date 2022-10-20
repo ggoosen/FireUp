@@ -12,6 +12,7 @@ Expect the occasional bug at this stage. The webserver can be deployed in a Dock
 * Supports Up categories
 * Supports foreign currencies
 * Accounts and balances automatically added to Firefly on first run
+* Automatically creates an Up webhook on your specified endpoint if none exists
 
 ## Notes
 
@@ -35,14 +36,14 @@ Expect the occasional bug at this stage. The webserver can be deployed in a Dock
 For easy deployment, the webserver runs in a [Docker](https://docs.docker.com/engine/install/) container. To get set up, clone the repository and build the image.
 
 ```
-git clone https://github.com/fireup
-cd fireup
+git clone https://github.com/lo-decibel/FireUp
+cd FireUp
 docker build -t fireup .
 ```
 
 ### Configuring the webserver
 
-In `.env`, edit following environment variables.
+In `docker-compose.env`, edit following environment variables.
 
 ```ini
 WEBHOOK_URL=https://webhook.example

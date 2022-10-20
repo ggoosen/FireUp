@@ -2,7 +2,9 @@ version: "3"
 services:
   fireup:
     image: fireup
+    env_file: docker-compose.env
     container_name: fireup
     restart: always
     ports:
       - ${WEBSERVER_PORT}:5001
+      

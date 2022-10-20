@@ -4,10 +4,19 @@ from flask import Flask, request, Response
 from waitress import serve
 import emoji, json, requests
 
-webhook_url = getenv('WEBHOOK_URL') + '/webhook'
-up_headers = { 'accept': 'application/json','Authorization': 'Bearer ' + getenv('UP_TOKEN') }
-firefly_headers = { 'accept': 'application/json', 'Authorization': 'Bearer ' + getenv('FIREFLY_TOKEN') }
 up_url = 'https://api.up.com.au/api/v1/'
+webhook_url = f'{getenv("WEBHOOK_URL")}/webhook'
+
+up_headers = { 
+	'accept': 'application/json',
+	'Authorization': f'Bearer {getenv("UP_TOKEN")}'
+}
+
+firefly_headers = { 
+	'accept': 'application/json', 
+	'Authorization': f'Bearer {getenv("FIREFLY_TOKEN")}'
+	}
+	
 firefly_url = f'{getenv("FIREFLY_URL")}/api/v1/'
 
 def xstr(s):
@@ -65,10 +74,10 @@ def setup():
 	# Create webhook
 	if not existsWebhook(webhook_url):
 		payload = {
-			"data": {
-				"attributes": {
-					"url": webhook_url,
-					"description": "Firefly"
+			'data': {
+				'attributes': {
+					'url': webhook_url,
+					'description': 'Firefly'
 				}
 			}
 		}
@@ -82,10 +91,10 @@ def setup():
 	up_accounts = {}
 	these_accounts = requests.get(f'{up_url}accounts', headers=up_headers).json()
 	for account in these_accounts['data']:	
-		if account['attributes']['accountType'] == "SAVER":
-			role = "savingAsset"
+		if account['attributes']['accountType'] == 'SAVER':
+			role = 'savingAsset'
 		else:
-			role = "defaultAsset"
+			role = 'defaultAsset'
 		
 		up_accounts[account['id']] = { 
 			'name': emoji.replace_emoji(account['attributes']['displayName'], replace='').lstrip(' '),
@@ -99,13 +108,13 @@ def setup():
 		if not this_account_name:
 			print(f'Adding account \"{up_accounts[account_id]["name"]}\" to Firefly.')
 			payload = {
-				"account_number": account_id,
-				"name": up_accounts[account_id]['name'],
-				"type": "asset",
-				"account_role": up_accounts[account_id]['role'],
-				"opening_balance": up_accounts[account_id]['balance'],
-				"opening_balance_date": datetime.now().strftime('%Y-%m-%d'),
-				"currency_code": "AUD"
+				'account_number': account_id,
+				'name': up_accounts[account_id]['name'],
+				'type': 'asset',
+				'account_role': up_accounts[account_id]['role'],
+				'opening_balance': up_accounts[account_id]['balance'],
+				'opening_balance_date': datetime.now().strftime('%Y-%m-%d'),
+				'currency_code': 'AUD'
 			}
 			request_code = requests.post(f'{firefly_url}accounts', headers=firefly_headers, json=payload).status_code
 			if request_code != 200:
@@ -116,17 +125,17 @@ def setup():
 		elif up_accounts[account_id]['name'] != this_account_name:
 			print(f'Updating account \"{up_accounts[account_id]["name"]}\".')
 			payload = {
-				"name": up_accounts[account_id]['name']
+				'name': up_accounts[account_id]['name']
 			}
-			requests.put(f'{firefly_url}accounts/{account}', headers=firefly_headers, json=payload)
+			requests.put(f'{firefly_url}accounts/{account_id}', headers=firefly_headers, json=payload)
 	
-	# Get Up categories, and add missing categories to Firefly
-	up_categories = {}
-	firefly_categories = []
-	print('Fetching transaction categories.')
+		# Get Up categories, and add missing categories to Firefly
+		up_categories = {}
+		firefly_categories = []
+		print('Fetching transaction categories.')
 
 	for firefly_category in requests.get(f'{firefly_url}categories', headers=firefly_headers).json()['data']:
-		firefly_categories.append(firefly_category['attributes']['name'])
+			firefly_categories.append(firefly_category['attributes']['name'])
 
 	for up_category in requests.get(f'{up_url}categories', headers=up_headers).json()['data']:
 		this_category = up_category['attributes']['name']
@@ -156,10 +165,10 @@ def respond():
 		firefly_transaction = getFireflyTransaction(up_transaction['id'])
 		entry = firefly_transaction['attributes']['transactions'][0]['description'].lstrip('[HELD] ')
 		payload = {
-			"transactions": [
+			'transactions': [
 				{
-					"description": entry,
-					"source_name": firefly_transaction['attributes']['transactions'][0]['source_name']
+					'description': entry,
+					'source_name': firefly_transaction['attributes']['transactions'][0]['source_name']
 				}
 			]
 		}
@@ -222,16 +231,16 @@ def respond():
 
 		# ADD TRANSACTION TO FIREFLY
 		payload = {
-			"transactions": [
+			'transactions': [
 				{
-					"amount": str(abs(amount)),
-					"description": entry,
-					"source_name": source,
-					"destination_name": target,
-					"category_name": category,
-					"type": kind,
-					"tags": tags,
-					"date": created_at
+					'amount': str(abs(amount)),
+					'description': entry,
+					'source_name': source,
+					'destination_name': target,
+					'category_name': category,
+					'type': kind,
+					'tags': tags,
+					'date': created_at
 				}
 			]
 		}
