@@ -23,7 +23,7 @@ def xstr(s):
 	return '' if s is None else str(s)
 
 def existsWebhook(url):
-	webhooks = requests.get('{up_url}webhooks', headers=up_headers).json()['data']
+	webhooks = requests.get(f'{up_url}webhooks', headers=up_headers).json()['data']
 	if not webhooks:
 		return False
 	else:
